@@ -1,0 +1,65 @@
+const express = require('express');
+
+const validatorHandler = require('../middlewares/validator.handler')
+const {createUserSchema, getUserSchema} = require('../schemas/user.schema')
+const UserService = require('./../services/user.service')
+
+const router = express.Router();
+const userService = new UserService
+
+router.get('/', async (request, response, next) => {
+  try {
+    const users = await userService.get()
+    response.json(users)
+  } catch (error) {
+    next(error);
+  }
+})
+
+router.get('/:id',
+  validatorHandler(getUserSchema, 'params'),
+  async (request, response, next) => {
+    try {
+      const {id} = request.params;
+      const user = await userService.getOne(id)
+      response.json(user)
+    } catch (error) {
+      next(error);
+    }
+  }
+)
+
+router.post('/', validatorHandler(createUserSchema, 'body') ,async (request, response) => {
+  const body = request.body;
+  res = await userService.create(body)
+  response.status(201).json({status:'ok',data:res})
+})
+
+router.patch('/:id',
+  validatorHandler(getUserSchema, 'params'),
+  validatorHandler(createUserSchema, 'body'),
+  (request, response) => {
+    const body = request.body;
+    const {id} = request.params;
+    response.json({status:'ok',data:body, id})
+  }
+)
+
+router.delete('/:id', (request, response) => {
+  const body = request.body;
+  const {id} = request.params;
+  response.json({status:'delete',data:body, id})
+})
+
+router.get('new-route/:id', (request, response) => {
+  const {id} = request.params;
+  response.json({status:'ok', data:id})
+})
+
+router.get('other-route-queryparams', (request, response) => {
+  const {page} = request.query;
+  response.json({status:'ok', page})
+})
+
+
+module.exports = router;
