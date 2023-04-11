@@ -1,7 +1,7 @@
 const express = require('express');
 
 const validatorHandler = require('../middlewares/validator.handler')
-const {createUserSchema, getUserSchema} = require('../schemas/user.schema')
+const {createUserSchema, getUserSchema, updateUserSchema} = require('../schemas/user.schema')
 const UserService = require('./../services/user.service')
 
 const router = express.Router();
@@ -29,19 +29,26 @@ router.get('/:id',
   }
 )
 
-router.post('/', validatorHandler(createUserSchema, 'body') ,async (request, response) => {
-  const body = request.body;
-  res = await userService.create(body)
-  response.status(201).json({status:'ok',data:res})
+router.post('/', validatorHandler(createUserSchema, 'body') ,
+  async (request, response, next) => {
+    try {
+      const body = request.body;
+      res = await userService.create(body)
+      response.status(201).json({status:'ok',data:res})
+    } catch (error) {
+      next(error);
+    }
 })
 
 router.patch('/:id',
   validatorHandler(getUserSchema, 'params'),
-  validatorHandler(createUserSchema, 'body'),
-  (request, response) => {
+  validatorHandler(updateUserSchema, 'body'),
+  async (request, response) => {
     const body = request.body;
     const {id} = request.params;
-    response.json({status:'ok',data:body, id})
+    res = await userService.update(id, body)
+
+    response.json({status:'ok',data:res, id})
   }
 )
 

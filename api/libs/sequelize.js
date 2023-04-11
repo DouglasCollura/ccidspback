@@ -1,15 +1,16 @@
-const { Client } = require('pg');
+const { Sequelize } = require('sequelize');
 const {config} = require('../config/config')
+const setupModels = require('../db/models')
 
 const USER = encodeURIComponent(config.dbUser);
 const PASS = encodeURIComponent(config.dbPassword);
 const URI = `postgres://${USER}:${PASS}@${config.dbHost}:${config.dbPort}/${config.dbName}`
 
-async function getConnection(){
-  const client = new Client({ connectionString: URI})
+const sequelize = new Sequelize(URI,{
+  dialect: 'postgres',
+  logging: true,
+})
 
-  await client.connect();
-  return client;
-}
+setupModels(sequelize);
 
-module.exports = getConnection;
+module.exports = sequelize;

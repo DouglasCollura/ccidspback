@@ -1,18 +1,24 @@
 const Joi = require('joi');
-
+const { createPeopleSchema } = require('./people.schema');
 const id = Joi.number();
-const name = Joi.string().alphanum().min(3).max(20);
-const lastname = Joi.string().alphanum().min(3).max(20);
+const email = Joi.string().email({ tlds: { allow: false } });
+const password = Joi.string().alphanum().min(3).max(20);
+const peopleId = Joi.number().integer();
 
 const createUserSchema = Joi.object({
-  name: name.required(),
-  lastname: lastname.required()
+  email: email.required(),
+  password: password.required(),
+  people: createPeopleSchema
+
 })
 
-
+const updateUserSchema = Joi.object({
+  email: email,
+  password: password
+})
 const getUserSchema = Joi.object({
   id: id.required()
 })
 
 
-module.exports = { createUserSchema, getUserSchema }
+module.exports = { createUserSchema, getUserSchema, updateUserSchema }
