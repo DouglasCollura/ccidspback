@@ -1,7 +1,7 @@
 const express = require('express');
 
 const validatorHandler = require('../middlewares/validator.handler')
-const { createInvestigatorSchema, getInvestigatorSchema} = require('./../schemas/investigator.schema')
+const { createInvestigatorSchema, getInvestigatorSchema, updateInvestigatorSchema } = require('./../schemas/investigator.schema')
 const InvestigatorService = require('./../services/investigator.service')
 
 const router = express.Router();
@@ -27,5 +27,29 @@ router.post('/', validatorHandler(createInvestigatorSchema, 'body') ,async (requ
     next(error);
   }
 })
+
+router.patch('/:id',
+  validatorHandler(getInvestigatorSchema, 'params'),
+  validatorHandler(updateInvestigatorSchema, 'body'),
+  async (request, response) => {
+    const body = request.body;
+    const {id} = request.params;
+    res = await investigatorService.update(id, body)
+    response.status(200).json({status:'ok',data:res})
+  }
+)
+
+router.delete('/:id',
+  validatorHandler(getInvestigatorSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await investigatorService.delete(id);
+      res.status(201).json({id});
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;

@@ -15,7 +15,9 @@ const createPeopleSchema = Joi.object({
 
 const updatePeopleSchema = Joi.object({
   name: name,
-  lastname: lastname
+  lastname: lastname,
+  nationality: nationality,
+  cedula: cedula
 })
 const getPeopleSchema = Joi.object({
   id: id.required()
