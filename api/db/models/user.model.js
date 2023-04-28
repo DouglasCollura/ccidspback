@@ -29,6 +29,10 @@ const UserSchema = {
     },
     onUpdate: 'CASCADE'
   },
+  role: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
   createdAt:{
     allowNull: false,
     type: DataTypes.DATE,
