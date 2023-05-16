@@ -6,7 +6,13 @@ const { logErrors, errorHandler } = require('./middlewares/error.handler')
 const { checkApiKey } = require('./middlewares/auth.handler')
 const app = express();
 const port = process.env.PORT || 3000;
-
+const bodyparser = require('body-parser')
+app.use(bodyparser.json())
+app.use(
+  bodyparser.urlencoded({
+    extended: true,
+  }),
+)
 app.use(express.json())
 app.use(cors());
 

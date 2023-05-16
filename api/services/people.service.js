@@ -14,8 +14,13 @@ class PeopleService {
   }
 
   async create(data){
-    const res = await models.People.create(data)
-    return res;
+    try {
+      const res = await models.People.create(data)
+      return res;
+    } catch (error) {
+      return error;
+    }
+
   }
 
 }

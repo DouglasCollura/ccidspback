@@ -9,6 +9,7 @@ const estadoRouter = require('./estado.router')
 const municipioRouter = require('./municipio.router')
 const parroquiaRouter = require('./parroquia.router')
 const authRouter = require('./auth.router')
+const bulkImportRouter = require('./bulk-import.router')
 
 function routerApp(app){
   const router = express.Router();
@@ -23,6 +24,8 @@ function routerApp(app){
   router.use('/municipio', municipioRouter)
   router.use('/parroquia', parroquiaRouter)
   router.use('/auth', authRouter)
+  router.use('/import_excel', bulkImportRouter)
+
 }
 
 
