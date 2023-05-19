@@ -1,5 +1,6 @@
 const { Estado } = require('../db/models/estado.model');
 const { Municipio } = require('../db/models/municipio.model');
+const sequelize = require('../libs/sequelize');
 const {models} = require('../libs/sequelize');
 
 class ParroquiaService {
@@ -15,6 +16,13 @@ class ParroquiaService {
   }
 
   async create(data){
+    const find = await sequelize.query(`
+    select *,
+    LEVENSHTEIN(name, '${data.name}') as levenshtein from parroquia where LEVENSHTEIN(name, '${data.name}') < 2 and municipio_id = ${data.municipioId}
+    `)
+    if(find[0].length > 0){
+      throw new Error(`Al parecer ${data.name} ya está registrado`)
+    }
     const res = await models.Parroquia.create(data)
     return res;
   }

@@ -1,3 +1,4 @@
+const sequelize = require('../libs/sequelize');
 const {models} = require('../libs/sequelize');
 
 class SeccionService {
@@ -23,6 +24,14 @@ class SeccionService {
   }
 
   async create(data){
+    console.log('data ', data)
+    const find = await sequelize.query(`
+    select *,
+    LEVENSHTEIN(name, '${data.name}') as levenshtein from seccion where LEVENSHTEIN(name, '${data.name}') < 1 and pnf_id = ${data.pnfId}
+    `)
+    if(find[0].length > 0){
+      throw new Error(`Al parecer ${data.name} ya está registrado`)
+    }
     const res = await models.Seccion.create(data)
     return res;
   }

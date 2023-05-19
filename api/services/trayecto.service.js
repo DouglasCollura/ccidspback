@@ -1,3 +1,4 @@
+const sequelize = require('../libs/sequelize');
 const {models} = require('../libs/sequelize');
 
 class TrayectoService {
@@ -12,6 +13,15 @@ class TrayectoService {
   }
 
   async create(data){
+    const find = await sequelize.query(`
+      select *,
+      LEVENSHTEIN(name, '${data.name}') as levenshtein from trayecto where LEVENSHTEIN(name, '${data.name}') < 1
+      `)
+
+    if(find[0].length > 0){
+      throw new Error(`Al parecer ${data.name} ya está registrado`)
+    }
+
     const res = await models.Trayecto.create(data)
     return res;
   }
