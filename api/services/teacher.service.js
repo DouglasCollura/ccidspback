@@ -1,12 +1,21 @@
 const {models} = require('../libs/sequelize');
 
 
-class InvestigatorService {
+class TeacherService {
 
   async get(){
     // const [data] = await sequelize.query('select * from users')
-    const {count, rows} = await models.Investigator.findAndCountAll({
-      include: ['people','pnf','seccion','trayecto'],
+    const {count, rows} = await models.User.findAndCountAll({
+      where:{role:'teacher'},
+      attributes: {exclude: ['password']},
+      include: [{association:'people',
+        include:[{
+          association:'teacher',
+          include:[
+            'pnf', 'trayecto','seccion'
+          ]
+        }]
+      }],
       order:[
         ['created_at', 'DESC']
       ]
@@ -15,9 +24,7 @@ class InvestigatorService {
   }
 
   async create(data){
-    const res = await models.Investigator.create(data,{
-      include: ['people']
-    })
+    const res = await models.Teacher.bulkCreate(data)
     return res;
   }
 
@@ -40,4 +47,4 @@ class InvestigatorService {
 
 }
 
-module.exports = InvestigatorService;
+module.exports = TeacherService;

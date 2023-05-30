@@ -5,7 +5,7 @@ class SeccionService {
 
   async get(){
     const {count, rows} = await models.Seccion.findAndCountAll({
-      include: ['pnf'],
+      include: ['pnf','trayecto'],
       order:[
         ['created_at', 'DESC']
       ]
@@ -13,14 +13,21 @@ class SeccionService {
     return {total:count, data:rows}
   }
 
-  async getByPnf(id){
+  async getByPnf(id, trayectoId){
     const {count, rows} = await models.Seccion.findAndCountAll({
-      where:{pnf_id:id},
+      where:{pnf_id:id, trayecto_id:trayectoId},
       order:[
         ['name', 'ASC']
       ]
     })
     return {total:count, data:rows}
+  }
+
+  async getIdByName(data){
+    const {dataValues} = await models.Seccion.findOne({
+      where:{name:data},
+    })
+    return dataValues.id;
   }
 
   async create(data){

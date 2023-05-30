@@ -13,6 +13,11 @@ const PnfSchema ={
     allowNull: false,
     type: DataTypes.STRING
   },
+  code: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+
   createdAt:{
     allowNull: false,
     type: DataTypes.DATE,
@@ -23,7 +28,10 @@ const PnfSchema ={
 
 class Pnf extends Model {
   static associate(models){
-
+    this.hasMany(models.Seccion,{
+      as:'seccion',
+      foreignKey:'pnfId'
+    })
   }
 
   static config(sequelize){

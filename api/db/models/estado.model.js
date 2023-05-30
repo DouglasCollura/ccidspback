@@ -22,10 +22,10 @@ const StateSchema ={
 
 class Estado extends Model {
   static associate(models){
-    // this.hasOne(models.Municipio, {
-    //   as: 'municipio',
-    //   foreignKey: 'municipioId'
-    // });
+    this.hasMany(models.Municipio,{
+      as:'municipio',
+      foreignKey:'estadoId'
+    })
   }
 
   static config(sequelize){

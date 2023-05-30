@@ -1,5 +1,8 @@
 const { Model, DataTypes, Sequelize } = require('sequelize')
 const { PEOPLE_TABLE } = require('./people.model')
+const { TRAYECTO_TABLE } = require('./trayecto.model')
+const { SECCION_TABLE } = require('./seccion.model')
+const { PNF_TABLE } = require('./pnf.model')
 const INVESTIGATOR_TABLE = 'investigator';
 
 
@@ -13,6 +16,36 @@ const InvestigatorSchema ={
   exp: {
     allowNull: false,
     type: DataTypes.STRING
+  },
+  trayectoId: {
+    field: 'trayecto_id',
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: TRAYECTO_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+  },
+  seccionId: {
+    field: 'seccion_id',
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: SECCION_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+  },
+  pnfId: {
+    field: 'pnf_id',
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: PNF_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
   },
   peopleId: {
     field: 'people_id',
@@ -36,6 +69,9 @@ const InvestigatorSchema ={
 class Investigator extends Model {
   static associate(models){
     this.belongsTo(models.People, {as: 'people'});
+    this.belongsTo(models.Pnf, {as: 'pnf'});
+    this.belongsTo(models.Seccion, {as: 'seccion'});
+    this.belongsTo(models.Trayecto, {as: 'trayecto'});
   }
 
   static config(sequelize){

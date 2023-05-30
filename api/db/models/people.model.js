@@ -40,6 +40,11 @@ class People extends Model {
       as: 'user',
       foreignKey: 'peopleId'
     });
+
+    this.hasMany(models.Teacher,{
+      as: 'teacher',
+      foreignKey: 'peopleId'
+    })
   }
 
   static config(sequelize){

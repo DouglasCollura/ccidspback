@@ -12,6 +12,13 @@ class PnfService {
     return {total:count, data:rows}
   }
 
+  async getIdByCode(data){
+    const {dataValues} = await models.Pnf.findOne({
+      where:{code:data},
+    })
+    return dataValues.id;
+  }
+
   async create(data){
     const find = await sequelize.query(`
     select *,

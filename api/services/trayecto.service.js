@@ -12,6 +12,23 @@ class TrayectoService {
     return {total:count, data:rows}
   }
 
+  async getByPnf(id){
+    const {count, rows} = await models.Seccion.findAndCountAll({
+      where:{pnf_id:id},
+      order:[
+        ['name', 'ASC']
+      ]
+    })
+    return {total:count, data:rows}
+  }
+
+  async getIdByName(data){
+    const {dataValues} = await models.Trayecto.findOne({
+      where:{name:data},
+    })
+    return dataValues.id;
+  }
+
   async create(data){
     const find = await sequelize.query(`
       select *,

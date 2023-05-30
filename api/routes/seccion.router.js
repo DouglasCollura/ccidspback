@@ -15,12 +15,12 @@ router.get('/', async (request, response, next) => {
   }
 })
 
-router.get('/:id',
+router.get('/:id/:trayectoId',
   validatorHandler(getSeccionSchema, 'params'),
   async (request, response, next) => {
   try {
-    const {id} = request.params;
-    const secciones = await seccionService.getByState(id)
+    const {id, trayectoId} = request.params;
+    const secciones = await seccionService.getByPnf(id,trayectoId)
     response.json(secciones)
   } catch (error) {
     next(error);
