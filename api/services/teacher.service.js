@@ -3,35 +3,78 @@ const {models} = require('../libs/sequelize');
 
 class TeacherService {
 
+  async findTeacher(data){
+    try {
+      const teacher = await models.People.findOne({
+        where:{cedula:data},
+        include:[
+          {
+            association:'teacher',
+            include:[
+              'pnf',
+              'trayecto',
+              'seccion'
+            ]
+          },
+          'user'
+        ]
+      });
+      if(!teacher){
+        return {type:1,data:null}
+      }
+
+      return {type:2,data:teacher}
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   async get(){
-    // const [data] = await sequelize.query('select * from users')
-    const {count, rows} = await models.User.findAndCountAll({
-      where:{role:'teacher'},
-      attributes: {exclude: ['password']},
-      include: [{association:'people',
-        include:[{
+
+    const data = await models.Teacher.findAll({
+      attributes:['people_id'],
+      group:[
+        'Teacher.people_id',
+      ],
+
+    })
+
+    const res = await models.People.findAll({
+      where: {
+        id:data.map(e => e.dataValues.people_id)
+      },
+      include:[
+        {
           association:'teacher',
           include:[
-            'pnf', 'trayecto','seccion'
+            'pnf',
+            'trayecto',
+            'seccion'
           ]
-        }]
-      }],
-      order:[
-        ['created_at', 'DESC']
+        }
       ]
     })
-    return {total:count, data:rows}
+
+
+    return {data:res}
   }
 
   async create(data){
-    const res = await models.Teacher.bulkCreate(data)
+    const dataFill = data.filter(e=> e.id == null)
+    const res = await models.Teacher.bulkCreate(dataFill)
+    return res;
+  }
+
+  async store(data){
+
+    res = await models.Teacher.create(data)
     return res;
   }
 
   async update(id, data) {
     try {
-      const inv = await models.Investigator.findByPk(id, {include: ['people']});
-      await inv.people.update(data?.people);
+      const inv = await models.Teacher.findByPk(id);
       await inv.update(data);
       return inv;
     } catch (error) {
@@ -39,9 +82,14 @@ class TeacherService {
     }
   }
 
-  async delete(id){
-    const model = await models.Investigator.findByPk(id);
-    await model.destroy();
+
+
+  async delete(data){
+    console.log('DATA DELETE',data)
+    data.map(async(e)=>{
+      const model = await models.Teacher.findByPk(e.id);
+      await model.destroy();
+    })
     return { rta: true };
   }
 

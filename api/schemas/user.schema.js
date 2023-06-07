@@ -10,8 +10,8 @@ const createUserSchema = Joi.object({
   email: email.required(),
   password: password.required(),
   role: role.required(),
-  people: createPeopleSchema
-
+  people: createPeopleSchema,
+  peopleId: peopleId
 })
 
 const updateUserSchema = Joi.object({

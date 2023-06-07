@@ -28,6 +28,17 @@ router.post('/', validatorHandler(createInvestigatorSchema, 'body') ,async (requ
   }
 })
 
+
+router.post('/register', async (request, response, next) => {
+  try {
+    const body = request.body;
+    res = await investigatorService.register(body)
+    response.status(201).json({status:'ok',data:res})
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.patch('/:id',
   validatorHandler(getInvestigatorSchema, 'params'),
   validatorHandler(updateInvestigatorSchema, 'body'),

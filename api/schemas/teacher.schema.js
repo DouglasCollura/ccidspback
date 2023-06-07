@@ -9,6 +9,7 @@ const peopleId = Joi.number().integer();
 // createTeacherSchema
 const createTeacherSchema =  Joi.array().items(
   Joi.object().keys({
+    id:id,
     trayectoId: trayectoId.required(),
     pnfId: pnfId.required(),
     seccionId: seccionId.required(),

@@ -8,6 +8,10 @@ const {Pnf, PnfSchema} = require('./pnf.model')
 const {Trayecto, TrayectoSchema} = require('./trayecto.model')
 const {Seccion, SeccionSchema} = require('./seccion.model')
 const {Teacher, TeacherSchema} = require('./teacher.model')
+const {AreaPrioritaria, AreaPrioritariaSchema} = require('./area-prioritaria')
+const {LineaInvestigacion, LineaInvestigacionSchema} = require('./linea-investigacion.model')
+const {DimensionEspacial, DimensionEspacialSchema} = require('./dimension-espacial.model')
+const {SujetoSocial, SujetoSocialSchema} = require('./sujeto-social.model')
 
 function setupModels(sequelize){
   User.init(UserSchema, User.config(sequelize))
@@ -20,6 +24,10 @@ function setupModels(sequelize){
   Trayecto.init(TrayectoSchema, Trayecto.config(sequelize))
   Seccion.init(SeccionSchema, Seccion.config(sequelize))
   Teacher.init(TeacherSchema, Teacher.config(sequelize))
+  AreaPrioritaria.init(AreaPrioritariaSchema, AreaPrioritaria.config(sequelize))
+  LineaInvestigacion.init(LineaInvestigacionSchema, LineaInvestigacion.config(sequelize))
+  DimensionEspacial.init(DimensionEspacialSchema, DimensionEspacial.config(sequelize))
+  SujetoSocial.init(SujetoSocialSchema, SujetoSocial.config(sequelize))
 
   User.associate(sequelize.models);
   Investigator.associate(sequelize.models);
@@ -29,6 +37,8 @@ function setupModels(sequelize){
   Municipio.associate(sequelize.models);
   Parroquia.associate(sequelize.models);
   Teacher.associate(sequelize.models);
+  DimensionEspacial.associate(sequelize.models);
+  SujetoSocial.associate(sequelize.models);
 }
 
 

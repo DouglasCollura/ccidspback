@@ -1,4 +1,5 @@
 const {models} = require('../libs/sequelize');
+const bcrypt = require('bcrypt');
 
 
 class InvestigatorService {
@@ -20,6 +21,21 @@ class InvestigatorService {
     })
     return res;
   }
+
+  async register(data){
+    const res = await models.Investigator.create(data,{
+      include: ['people']
+    })
+    data.user.peopleId =res.peopleId;
+    const hash = await bcrypt.hash(data.user.password, 10);
+    const user = await models.User.create({
+      ...data.user,
+      password:hash
+    },)
+    console.log('data ', res.peopleId)
+    return user;
+  }
+
 
   async update(id, data) {
     try {
