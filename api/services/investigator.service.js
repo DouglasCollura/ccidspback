@@ -1,45 +1,49 @@
-const {models} = require('../libs/sequelize');
+const { models } = require('../libs/sequelize');
 const bcrypt = require('bcrypt');
 
 
 class InvestigatorService {
 
-  async get(){
+  async get() {
     // const [data] = await sequelize.query('select * from users')
-    const {count, rows} = await models.Investigator.findAndCountAll({
-      include: ['people','pnf','seccion','trayecto'],
-      order:[
+    const { count, rows } = await models.Investigator.findAndCountAll({
+      include: ['people', 'pnf', 'seccion', 'trayecto'],
+      order: [
         ['created_at', 'DESC']
       ]
     })
-    return {total:count, data:rows}
+    return { total: count, data: rows }
   }
 
-  async create(data){
-    const res = await models.Investigator.create(data,{
-      include: ['people']
-    })
-    return res;
+  async create(data) {
+    try {
+
+      const res = await models.Investigator.create(data, {
+        include: ['people']
+      })
+
+      return res;
+    } catch (error) {
+      throw new Error(error)
+
+    }
   }
 
-  async register(data){
-    const res = await models.Investigator.create(data,{
-      include: ['people']
-    })
-    data.user.peopleId =res.peopleId;
+  async register(data) {
+    // const res = await models.Investigator.create(data)
+    // data.user.peopleId = res.peopleId;
     const hash = await bcrypt.hash(data.user.password, 10);
     const user = await models.User.create({
       ...data.user,
-      password:hash
+      password: hash
     },)
-    console.log('data ', res.peopleId)
     return user;
   }
 
 
   async update(id, data) {
     try {
-      const inv = await models.Investigator.findByPk(id, {include: ['people']});
+      const inv = await models.Investigator.findByPk(id, { include: ['people'] });
       await inv.people.update(data?.people);
       await inv.update(data);
       return inv;
@@ -48,7 +52,7 @@ class InvestigatorService {
     }
   }
 
-  async delete(id){
+  async delete(id) {
     const model = await models.Investigator.findByPk(id);
     await model.destroy();
     return { rta: true };

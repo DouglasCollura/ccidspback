@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { models } = require('../libs/sequelize');
 
 const id = Joi.number().integer();
 const name = Joi.string().min(3).max(20);
@@ -23,5 +24,21 @@ const getPeopleSchema = Joi.object({
   id: id.required()
 })
 
+const validateCedula = async (req, res, next) => {
+  const body = req.body;
+  const cedula = body.cedula ?? body.people.cedula;
 
-module.exports = { createPeopleSchema, updatePeopleSchema, getPeopleSchema }
+  const data = await models.People.findOne({
+    where: { cedula: cedula }
+  })
+  if (data) {
+    return res.status(400).json({ error: {mensaje:'la cedula ya ha sido registrada.'} });
+  }else{
+    next();
+  }
+}
+
+
+
+
+module.exports = { createPeopleSchema, updatePeopleSchema, getPeopleSchema, validateCedula }

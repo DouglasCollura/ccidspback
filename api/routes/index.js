@@ -15,6 +15,7 @@ const areaPrioritariaRouter = require('./area-prioritaria.router')
 const lineaInvestigacionRouter = require('./linea-investigacion.router')
 const dimensionEspacialRouter = require('./dimension-espacial.router')
 const sujetoSocialRouter = require('./sujeto-social.router')
+const academicYearRouter = require('./academic-year.router')
 
 function routerApp(app){
   const router = express.Router();
@@ -35,6 +36,7 @@ function routerApp(app){
   router.use('/linea-investigacion', lineaInvestigacionRouter)
   router.use('/dimension-espacial', dimensionEspacialRouter)
   router.use('/sujeto-social', sujetoSocialRouter)
+  router.use('/academic-year', academicYearRouter)
 
 }
 

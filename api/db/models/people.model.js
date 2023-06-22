@@ -20,11 +20,16 @@ const PeopleSchema ={
   nationality: {
     allowNull: false,
     type: DataTypes.INTEGER
+
   },
   cedula: {
     allowNull: false,
     type: DataTypes.STRING(8),
-    unique: true,
+    unique: {
+      args: true,
+      msg: 'El nombre de usuario ya está en uso',
+    },
+
   },
   createdAt:{
     allowNull: false,
@@ -45,6 +50,11 @@ class People extends Model {
       as: 'teacher',
       foreignKey: 'peopleId'
     })
+
+    this.hasOne(models.Investigator, {
+      as: 'investigator',
+      foreignKey: 'peopleId'
+    });
   }
 
   static config(sequelize){

@@ -16,14 +16,26 @@ class TeacherService {
               'seccion'
             ]
           },
-          'user'
+          'user',
+          {
+            association:'investigator',
+            include:[
+              'pnf',
+              'trayecto',
+              'seccion'
+            ]
+          }
         ]
       });
       if(!teacher){
         return {type:1,data:null}
       }
 
-      return {type:2,data:teacher}
+      if(teacher.investigator){
+        return {type:3,data:teacher}
+      }else{
+        return {type:2,data:teacher}
+      }
 
     } catch (error) {
       console.error(error)

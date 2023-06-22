@@ -1,4 +1,6 @@
 const Joi = require('joi');
+const { models } = require('../libs/sequelize');
+
 const { createPeopleSchema } = require('./people.schema');
 const id = Joi.number();
 const email = Joi.string().email({ tlds: { allow: false } });
@@ -23,4 +25,18 @@ const getUserSchema = Joi.object({
 })
 
 
-module.exports = { createUserSchema, getUserSchema, updateUserSchema }
+const validateEmail = async (req, res, next) => {
+  const body = req.body;
+  const email = body?.user?.email ?? body.email
+  const data = await models.User.findOne({
+    where: { email:  email}
+  })
+  if (data) {
+    return res.status(400).json({ error: {mensaje:'el email ya ha sido registrado.'} });
+  }else{
+    next();
+  }
+}
+
+
+module.exports = { createUserSchema, getUserSchema, updateUserSchema ,validateEmail}

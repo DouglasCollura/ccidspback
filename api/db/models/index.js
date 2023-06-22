@@ -12,10 +12,13 @@ const {AreaPrioritaria, AreaPrioritariaSchema} = require('./area-prioritaria')
 const {LineaInvestigacion, LineaInvestigacionSchema} = require('./linea-investigacion.model')
 const {DimensionEspacial, DimensionEspacialSchema} = require('./dimension-espacial.model')
 const {SujetoSocial, SujetoSocialSchema} = require('./sujeto-social.model')
+const {AcademicYear, AcademicYearSchema} = require('./academic-year.model')
 
 function setupModels(sequelize){
   User.init(UserSchema, User.config(sequelize))
   People.init(PeopleSchema, People.config(sequelize))
+  AcademicYear.init(AcademicYearSchema, AcademicYear.config(sequelize))
+
   Investigator.init(InvestigatorSchema, Investigator.config(sequelize))
   Estado.init(StateSchema, Estado.config(sequelize))
   Municipio.init(MunicipioSchema, Municipio.config(sequelize))
@@ -39,6 +42,7 @@ function setupModels(sequelize){
   Teacher.associate(sequelize.models);
   DimensionEspacial.associate(sequelize.models);
   SujetoSocial.associate(sequelize.models);
+  LineaInvestigacion.associate(sequelize.models);
 }
 
 

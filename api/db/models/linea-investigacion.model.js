@@ -1,4 +1,5 @@
-const { Model, DataTypes, Sequelize } = require('sequelize')
+const { Model, DataTypes, Sequelize } = require('sequelize');
+const { AREA_PRIORITARIA_TABLE } = require('./area-prioritaria');
 
 const LINEA_INVESTIGACION_TABLE = 'linea_investigacion';
 
@@ -13,6 +14,17 @@ const LineaInvestigacionSchema ={
     allowNull: false,
     type: DataTypes.STRING
   },
+  AreaPrioritariaId: {
+    type: DataTypes.INTEGER,
+    field: 'area_prioritaria_id',
+    allowNull: true,
+    references: {
+      model: AREA_PRIORITARIA_TABLE,
+      key: 'id',
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
+  },
   createdAt:{
     allowNull: false,
     type: DataTypes.DATE,
@@ -23,6 +35,7 @@ const LineaInvestigacionSchema ={
 
 class LineaInvestigacion extends Model {
   static associate(models){
+    this.belongsTo(models.AreaPrioritaria, {as: 'AreaPrioritaria'});
 
   }
 

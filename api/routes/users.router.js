@@ -1,7 +1,7 @@
 const express = require('express');
 
 const validatorHandler = require('../middlewares/validator.handler')
-const {createUserSchema, getUserSchema, updateUserSchema} = require('../schemas/user.schema')
+const {createUserSchema, getUserSchema, updateUserSchema, validateEmail} = require('../schemas/user.schema')
 const UserService = require('./../services/user.service')
 
 const router = express.Router();
@@ -29,7 +29,9 @@ router.get('/:id',
   }
 )
 
-router.post('/', validatorHandler(createUserSchema, 'body') ,
+router.post('/',
+validateEmail,
+validatorHandler(createUserSchema, 'body') ,
   async (request, response, next) => {
     try {
       const body = request.body;

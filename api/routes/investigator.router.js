@@ -1,8 +1,10 @@
 const express = require('express');
 
 const validatorHandler = require('../middlewares/validator.handler')
-const { createInvestigatorSchema, getInvestigatorSchema, updateInvestigatorSchema } = require('./../schemas/investigator.schema')
-const InvestigatorService = require('./../services/investigator.service')
+const { createInvestigatorSchema, getInvestigatorSchema, updateInvestigatorSchema, validateExp } = require('./../schemas/investigator.schema')
+const InvestigatorService = require('./../services/investigator.service');
+const { validateCedula } = require('../schemas/people.schema');
+const { validateEmail } = require('../schemas/user.schema');
 
 const router = express.Router();
 const investigatorService = new InvestigatorService;
@@ -18,7 +20,11 @@ router.get('/', async (request, response, next) => {
   }
 })
 
-router.post('/', validatorHandler(createInvestigatorSchema, 'body') ,async (request, response, next) => {
+router.post('/',
+  validatorHandler(createInvestigatorSchema, 'body'),
+  validateCedula,
+  validateExp,
+  async (request, response, next) => {
   try {
     const body = request.body;
     res = await investigatorService.create(body)
@@ -29,7 +35,9 @@ router.post('/', validatorHandler(createInvestigatorSchema, 'body') ,async (requ
 })
 
 
-router.post('/register', async (request, response, next) => {
+router.post('/register',
+validateEmail,
+async (request, response, next) => {
   try {
     const body = request.body;
     res = await investigatorService.register(body)

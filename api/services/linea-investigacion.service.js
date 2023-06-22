@@ -5,6 +5,7 @@ class LineaInvestigacionService {
 
   async get(){
     const {count, rows} = await models.LineaInvestigacion.findAndCountAll({
+      include:['AreaPrioritaria'],
       order:[
         ['created_at', 'DESC']
       ]
