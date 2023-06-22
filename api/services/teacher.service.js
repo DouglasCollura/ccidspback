@@ -86,7 +86,8 @@ class TeacherService {
 
   async update(id, data) {
     try {
-      const inv = await models.Teacher.findByPk(id);
+      const inv = await models.Teacher.findByPk(id, { include: ['people'] });
+      await inv.people.update(data?.people);
       await inv.update(data);
       return inv;
     } catch (error) {
@@ -99,8 +100,8 @@ class TeacherService {
   async delete(data){
     console.log('DATA DELETE',data)
     data.map(async(e)=>{
-      const model = await models.Teacher.findByPk(e.id);
-      await model.destroy();
+        const model = await models.Teacher.findByPk(e?.id);
+        await model.destroy();
     })
     return { rta: true };
   }

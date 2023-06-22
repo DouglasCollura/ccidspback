@@ -13,6 +13,23 @@ class PeopleService {
     return {data, page}
   }
 
+  async update(id, data) {
+    try {
+      const inv = await models.People.findByPk(id);
+      await inv.update(data);
+      return inv;
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async delete(id){
+    const model = await models.People.findByPk(id);
+    await model.destroy();
+    return { rta: true };
+  }
+
+
   async create(data){
       const res = await models.People.create(data)
       return res;

@@ -43,7 +43,7 @@ router.post('/delete',
     try {
       const body = req.body;
       await teacherService.delete(body);
-      res.status(201).json({id});
+      res.status(201).json(true);
     } catch (error) {
       next(error);
     }

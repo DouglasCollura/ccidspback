@@ -1,7 +1,7 @@
 const express = require('express');
 
 const validatorHandler = require('../middlewares/validator.handler')
-const { createPeopleSchema, getPeopleSchema, validateCedula} = require('./../schemas/people.schema')
+const { createPeopleSchema, getPeopleSchema, validateCedula, updatePeopleSchema} = require('./../schemas/people.schema')
 const PeopleService = require('./../services/people.service');
 const { validateExp } = require('../schemas/investigator.schema');
 
@@ -19,6 +19,17 @@ router.get('/', async (request, response, next) => {
   }
 })
 
+router.patch('/:id',
+  validatorHandler(getPeopleSchema, 'params'),
+  validatorHandler(updatePeopleSchema, 'body'),
+  async (request, response) => {
+    const body = request.body;
+    const {id} = request.params;
+    res = await peopleService.update(id, body)
+    response.status(200).json({status:'ok',data:res})
+  }
+)
+
 router.post('/',
   validatorHandler(createPeopleSchema, 'body'),
   validateCedula,
@@ -31,5 +42,18 @@ router.post('/',
     next(error);
   }
 })
+
+router.delete('/:id',
+  validatorHandler(getPeopleSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await peopleService.delete(id);
+      res.status(201).json({id});
+    } catch (error) {
+      next(error);
+    }
+  }
+)
 
 module.exports = router;

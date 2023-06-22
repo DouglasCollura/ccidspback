@@ -54,7 +54,9 @@ class InvestigatorService {
 
   async delete(id) {
     const model = await models.Investigator.findByPk(id);
-    await model.destroy();
+    await model.destroy({
+      include:['people']
+    });
     return { rta: true };
   }
 
