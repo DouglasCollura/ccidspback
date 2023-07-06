@@ -12,7 +12,9 @@ const {AreaPrioritaria, AreaPrioritariaSchema} = require('./area-prioritaria')
 const {LineaInvestigacion, LineaInvestigacionSchema} = require('./linea-investigacion.model')
 const {DimensionEspacial, DimensionEspacialSchema} = require('./dimension-espacial.model')
 const {SujetoSocial, SujetoSocialSchema} = require('./sujeto-social.model')
-const {AcademicYear, AcademicYearSchema} = require('./academic-year.model')
+const {AcademicYear, AcademicYearSchema} = require('./academic-year.model');
+const { Project, ProjectSchema } = require('./project.model');
+const { ProjectStudent, ProjectStudentSchema } = require('./project-student.model');
 
 function setupModels(sequelize){
   User.init(UserSchema, User.config(sequelize))
@@ -31,6 +33,8 @@ function setupModels(sequelize){
   LineaInvestigacion.init(LineaInvestigacionSchema, LineaInvestigacion.config(sequelize))
   DimensionEspacial.init(DimensionEspacialSchema, DimensionEspacial.config(sequelize))
   SujetoSocial.init(SujetoSocialSchema, SujetoSocial.config(sequelize))
+  Project.init(ProjectSchema, Project.config(sequelize))
+  ProjectStudent.init(ProjectStudentSchema, ProjectStudent.config(sequelize))
 
   User.associate(sequelize.models);
   Investigator.associate(sequelize.models);
@@ -43,6 +47,8 @@ function setupModels(sequelize){
   DimensionEspacial.associate(sequelize.models);
   SujetoSocial.associate(sequelize.models);
   LineaInvestigacion.associate(sequelize.models);
+  Project.associate(sequelize.models);
+  ProjectStudent.associate(sequelize.models);
 }
 
 

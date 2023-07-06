@@ -13,15 +13,16 @@ class SujetoSocialService {
     return {total:count, data:rows}
   }
 
-  async getByState(id){
+  async find(id){
     const {count, rows} = await models.SujetoSocial.findAndCountAll({
-      where:{estado_id:id},
+      where:{dimension_espacial_id:id},
       order:[
-        ['name', 'ASC']
+        ['created_at', 'DESC']
       ]
     })
     return {total:count, data:rows}
   }
+
 
   async create(data){
     const find = await sequelize.query(`

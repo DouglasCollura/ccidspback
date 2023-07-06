@@ -34,6 +34,19 @@ router.post('/',
   }
 })
 
+router.post('/list',
+  // validatorHandler(createInvestigatorSchema, 'body'),
+  // validateCedula,
+  // validateExp,
+  async (request, response, next) => {
+  try {
+    const body = request.body;
+    res = await investigatorService.getList(body)
+    response.status(201).json({status:'ok',data:res})
+  } catch (error) {
+    next(error);
+  }
+})
 
 router.post('/register',
 validateEmail,

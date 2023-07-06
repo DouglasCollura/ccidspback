@@ -13,6 +13,16 @@ class LineaInvestigacionService {
     return {total:count, data:rows}
   }
 
+  async find(id){
+    const {count, rows} = await models.LineaInvestigacion.findAndCountAll({
+      where:{area_prioritaria_id:id},
+      order:[
+        ['created_at', 'DESC']
+      ]
+    })
+    return {total:count, data:rows}
+  }
+
 
   async create(data){
     const find = await sequelize.query(`

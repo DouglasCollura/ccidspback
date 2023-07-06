@@ -17,6 +17,16 @@ router.get('/', async (request, response, next) => {
   }
 })
 
+router.get('/find/:id', async (request, response, next) => {
+  try {
+    const {id} = request.params;
+    const users = await lineaInvestigacionService.find(id)
+    response.json(users)
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.post('/', validatorHandler(createLineaInvestigacionSchema, 'body') ,async (request, response, next) => {
   try {
     const body = request.body;

@@ -27,6 +27,17 @@ router.get('/:id',
   }
 })
 
+
+router.get('/find/:id', async (request, response, next) => {
+  try {
+    const {id} = request.params;
+    const users = await sujetoSocialService.find(id)
+    response.json(users)
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.post('/', validatorHandler(createSujetoSocialSchema, 'body') ,async (request, response, next) => {
   try {
     const body = request.body;
