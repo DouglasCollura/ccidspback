@@ -1,16 +1,16 @@
-const {models} = require('../libs/sequelize');
-
+const { models } = require('../libs/sequelize');
+const { Op } = require('sequelize');
 
 class TeacherService {
 
-  async findTeacher(data){
+  async findTeacher(data) {
     try {
       const teacher = await models.People.findOne({
-        where:{cedula:data},
-        include:[
+        where: { cedula: data },
+        include: [
           {
-            association:'teacher',
-            include:[
+            association: 'teacher',
+            include: [
               'pnf',
               'trayecto',
               'seccion'
@@ -18,8 +18,8 @@ class TeacherService {
           },
           'user',
           {
-            association:'investigator',
-            include:[
+            association: 'investigator',
+            include: [
               'pnf',
               'trayecto',
               'seccion'
@@ -27,14 +27,14 @@ class TeacherService {
           }
         ]
       });
-      if(!teacher){
-        return {type:1,data:null}
+      if (!teacher) {
+        return { type: 1, data: null }
       }
 
-      if(teacher.investigator){
-        return {type:3,data:teacher}
-      }else{
-        return {type:2,data:teacher}
+      if (teacher.investigator) {
+        return { type: 3, data: teacher }
+      } else {
+        return { type: 2, data: teacher }
       }
 
     } catch (error) {
@@ -42,11 +42,11 @@ class TeacherService {
     }
   }
 
-  async get(){
+  async get() {
 
     const data = await models.Teacher.findAll({
-      attributes:['people_id'],
-      group:[
+      attributes: ['people_id'],
+      group: [
         'Teacher.people_id',
       ],
 
@@ -54,12 +54,12 @@ class TeacherService {
 
     const res = await models.People.findAll({
       where: {
-        id:data.map(e => e.dataValues.people_id)
+        id: data.map(e => e.dataValues.people_id)
       },
-      include:[
+      include: [
         {
-          association:'teacher',
-          include:[
+          association: 'teacher',
+          include: [
             'pnf',
             'trayecto',
             'seccion'
@@ -69,16 +69,64 @@ class TeacherService {
     })
 
 
-    return {data:res}
+    return { data: res }
   }
 
-  async create(data){
-    const dataFill = data.filter(e=> e.id == null)
+  async getProjectByTeacher(id) {
+    const teacher = await models.Teacher.findAll({
+      where: {
+        people_id: id
+      },
+      attributes: ['seccionId'],
+      group:[
+        'seccionId'
+      ]
+    })
+
+    const projects = await models.Project.findAll({
+      order:[
+        ['created_at', 'DESC']
+      ],
+      include:[
+        {
+          association:'projectStudent',
+          include:[
+            {
+              association:'investigator',
+              include:[
+                'people'
+              ]
+            }
+
+          ]
+        },
+        'pnf',
+        'trayecto',
+        'DimensionEspacial',
+        'AreaPrioritaria',
+        'AreaPrioritaria',
+        'AcademicYear',
+        'LineaInvestigacion',
+        'SujetoSocial',
+        'seccion'
+
+      ],
+      where: {
+        seccionId:{
+          [Op.in]: teacher.map(obj => obj.seccionId)
+        }
+      }
+    })
+    return projects
+  }
+
+  async create(data) {
+    const dataFill = data.filter(e => e.id == null)
     const res = await models.Teacher.bulkCreate(dataFill)
     return res;
   }
 
-  async store(data){
+  async store(data) {
 
     res = await models.Teacher.create(data)
     return res;
@@ -95,13 +143,11 @@ class TeacherService {
     }
   }
 
-
-
-  async delete(data){
-    console.log('DATA DELETE',data)
-    data.map(async(e)=>{
-        const model = await models.Teacher.findByPk(e?.id);
-        await model.destroy();
+  async delete(data) {
+    console.log('DATA DELETE', data)
+    data.map(async (e) => {
+      const model = await models.Teacher.findByPk(e?.id);
+      await model.destroy();
     })
     return { rta: true };
   }

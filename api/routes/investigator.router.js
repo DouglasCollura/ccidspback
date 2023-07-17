@@ -20,6 +20,27 @@ router.get('/', async (request, response, next) => {
   }
 })
 
+router.get('/getByPeopleId/:id', async (req, response, next) => {
+  try {
+    const { id } = req.params;
+
+    const users = await investigatorService.getStudentByPeopleId(id)
+    response.json(users)
+  } catch (error) {
+    next(error);
+  }
+})
+
+router.post('/search', async (req, response, next) => {
+  try {
+    const body = req.body;
+    const users = await investigatorService.searchStudent(body)
+    response.json(users)
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.post('/',
   validatorHandler(createInvestigatorSchema, 'body'),
   validateCedula,

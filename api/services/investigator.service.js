@@ -1,5 +1,6 @@
 const { where } = require('sequelize');
 const { models } = require('../libs/sequelize');
+const { Op } = require('sequelize');
 const bcrypt = require('bcrypt');
 
 
@@ -16,6 +17,45 @@ class InvestigatorService {
     return { total: count, data: rows }
   }
 
+  async getStudentByPeopleId(id) {
+    // const [data] = await sequelize.query('select * from users')
+    const data = await models.People.findOne({
+      include: ['investigator'],
+      where: { 'id': id }
+    })
+    return data
+  }
+
+  async searchStudent(data) {
+    // const [data] = await sequelize.query('select * from users')
+    const { count, rows } = await models.Investigator.findAndCountAll({
+      include: ['people', 'pnf', 'seccion', 'trayecto'],
+      order: [
+        ['created_at', 'DESC']
+      ],
+      where: [
+        { pnf_id: data?.pnfId },
+        { trayecto_id: data?.trayectoId },
+        { seccion_id: data?.seccionId },
+        {
+          [Op.or]: [
+            {
+              'people.cedula': {
+                [Op.like]: `%${data?.search}%`,
+              }
+            },
+            {
+              exp: {
+                [Op.like]: `%${data?.search}%`,
+              }
+            },
+          ],
+        }
+      ]
+    })
+    return { total: count, data: rows }
+  }
+
   async getList(data) {
     // const [data] = await sequelize.query('select * from users')
     const { count, rows } = await models.Investigator.findAndCountAll({
@@ -23,10 +63,10 @@ class InvestigatorService {
       order: [
         ['created_at', 'DESC']
       ],
-      where:[
-        {pnf_id:data?.pnfId},
-        {trayecto_id:data?.trayectoId},
-        {seccion_id:data?.seccionId},
+      where: [
+        { pnf_id: data?.pnfId },
+        { trayecto_id: data?.trayectoId },
+        { seccion_id: data?.seccionId },
       ]
     })
     return { total: count, data: rows }
@@ -72,7 +112,7 @@ class InvestigatorService {
   async delete(id) {
     const model = await models.Investigator.findByPk(id);
     await model.destroy({
-      include:['people']
+      include: ['people']
     });
     return { rta: true };
   }

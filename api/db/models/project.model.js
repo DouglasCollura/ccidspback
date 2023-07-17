@@ -22,7 +22,11 @@ const ProjectSchema ={
     allowNull: false,
     type: DataTypes.STRING
   },
-  academicYearId: {
+  status: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  AcademicYearId: {
     field: 'academic_year_id',
     allowNull: false,
     type: DataTypes.INTEGER,
@@ -75,7 +79,7 @@ const ProjectSchema ={
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL',
   },
-  lineaInvestigacionId: {
+  LineaInvestigacionId: {
     type: DataTypes.INTEGER,
     field: 'linea_investigacion_id',
     allowNull: true,
@@ -97,7 +101,7 @@ const ProjectSchema ={
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE'
   },
-  sujetoSocialId: {
+  SujetoSocialId: {
     field: 'sujeto_social_id',
     allowNull: false,
     type: DataTypes.INTEGER,
@@ -120,10 +124,16 @@ class Project extends Model {
   static associate(models){
     this.belongsTo(models.Pnf, {as: 'pnf'});
     this.belongsTo(models.Trayecto, {as: 'trayecto'});
+    this.belongsTo(models.Seccion, {as: 'seccion'});
     this.belongsTo(models.DimensionEspacial, {as: 'DimensionEspacial'});
     this.belongsTo(models.AreaPrioritaria, {as: 'AreaPrioritaria'});
     this.belongsTo(models.LineaInvestigacion, {as: 'LineaInvestigacion'});
     this.belongsTo(models.SujetoSocial, {as: 'SujetoSocial'});
+    this.belongsTo(models.AcademicYear, {as: 'AcademicYear'});
+    this.hasMany(models.ProjectStudent,{
+      as:'projectStudent',
+      foreignKey:'projectId'
+    })
   }
 
   static config(sequelize){

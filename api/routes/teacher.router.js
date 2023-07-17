@@ -18,6 +18,17 @@ router.get('/find/:cedula', async (request, response, next) => {
   }
 })
 
+router.get('/get-projects/:id', async (request, response, next) => {
+  try {
+    const { id } = request.params;
+
+    const projects = await teacherService.getProjectByTeacher(id)
+    response.json(projects)
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.get('/', async (request, response, next) => {
   try {
     const {page} = request.query;

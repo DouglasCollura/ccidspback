@@ -12,10 +12,6 @@ const ProjectStudentSchema ={
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  name: {
-    allowNull: false,
-    type: DataTypes.STRING
-  },
   investigatorId: {
     field: 'investigator_id',
     allowNull: true,
@@ -48,13 +44,15 @@ const ProjectStudentSchema ={
 
 class ProjectStudent extends Model {
   static associate(models){
-    this.hasMany(models.Investigator,{
-      as:'investigator',
-      foreignKey:'id'
-    })
+    // this.hasMany(models.Investigator,{
+    //   as:'investigator',
+    //   foreignKey:'id'
+    // })
+    this.belongsTo(models.Investigator, {as: 'investigator'});
+
     this.hasOne(models.Project,{
       as:'project',
-      foreignKey:'projectId'
+      foreignKey:'id'
     })
 
   }
