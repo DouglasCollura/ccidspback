@@ -34,7 +34,8 @@ const updateInvestigatorSchema = Joi.object({
   trayectoId: trayectoId.required(),
   pnfId: pnfId.required(),
   seccionId: seccionId.required(),
-  people: updatePeopleSchema
+  people: updatePeopleSchema,
+  academicYearId:academicYearId
 })
 const getInvestigatorSchema = Joi.object({
   id: id.required()

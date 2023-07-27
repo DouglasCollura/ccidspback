@@ -33,6 +33,7 @@ router.post('/',
 router.patch('/:id',
   validatorHandler(getAcademicYearSchema, 'params'),
   validatorHandler(updateAcademicYearSchema, 'body'),
+  validateAcademicYear,
   async (request, response) => {
     const body = request.body;
     const {id} = request.params;
