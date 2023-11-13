@@ -13,6 +13,7 @@ const SujetoSocialSchema ={
     allowNull: false,
     type: DataTypes.STRING
   },
+
   DimensionEspacialId: {
     field: 'dimension_espacial_id',
     allowNull: false,

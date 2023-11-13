@@ -45,6 +45,7 @@ function setupModels(sequelize){
   Parroquia.associate(sequelize.models);
   Teacher.associate(sequelize.models);
   DimensionEspacial.associate(sequelize.models);
+  AreaPrioritaria.associate(sequelize.models);
   SujetoSocial.associate(sequelize.models);
   LineaInvestigacion.associate(sequelize.models);
   Project.associate(sequelize.models);

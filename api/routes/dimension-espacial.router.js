@@ -17,6 +17,17 @@ router.get('/', async (request, response, next) => {
   }
 })
 
+router.get('/parroquia/:id', async (request, response, next) => {
+  try {
+    const {id} = request.params;
+    const users = await dimensionEspacialService.getByParroquiaId(id)
+    response.json(users)
+  } catch (error) {
+    next(error);
+  }
+})
+
+
 router.post('/', validatorHandler(createDimensionEspacialSchema, 'body') ,async (request, response, next) => {
   try {
     const body = request.body;

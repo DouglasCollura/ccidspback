@@ -33,25 +33,54 @@ class InvestigatorService {
       order: [
         ['created_at', 'DESC']
       ],
-      where: [
-        { pnf_id: data?.pnfId },
-        { trayecto_id: data?.trayectoId },
-        { seccion_id: data?.seccionId },
+      where: {
+        pnf_id: data?.pnfId,
+        trayecto_id: data?.trayectoId,
+        seccion_id: data?.seccionId,
+        [Op.or]: [
+          {
+            '$people.cedula$': {
+              [Op.like]: `%${data?.search}%`,
+            },
+          },
+          {
+            exp: {
+              [Op.like]: `%${data?.search}%`,
+            },
+          },
+        ],
+      },
+    })
+    return { total: count, data: rows }
+  }
+
+  async listStudentProject(data) {
+    // const [data] = await sequelize.query('select * from users')
+    const { count, rows } = await models.Investigator.findAndCountAll({
+      include: [
+        'people', 'pnf', 'seccion', 'trayecto',
         {
-          [Op.or]: [
-            {
-              'people.cedula': {
-                [Op.like]: `%${data?.search}%`,
+          model:models.ProjectStudent,
+          as:'projectStudents',
+          include: {
+            model: models.Project,
+            as: 'project',
+            where: {
+              status: {
+                [Op.in]: [0, 1]
               }
-            },
-            {
-              exp: {
-                [Op.like]: `%${data?.search}%`,
-              }
-            },
-          ],
+            }
+          }
         }
-      ]
+      ],
+      order: [
+        ['created_at', 'DESC']
+      ],
+      where: {
+        pnf_id: data?.pnfId,
+        trayecto_id: data?.trayectoId,
+        seccion_id: data?.seccionId,
+      },
     })
     return { total: count, data: rows }
   }

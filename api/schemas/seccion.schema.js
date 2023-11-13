@@ -18,7 +18,7 @@ const updateSeccionSchema = Joi.object({
 })
 const getSeccionSchema = Joi.object({
   id: id.required(),
-  trayectoId: trayectoId.required(),
+  trayectoId: trayectoId,
 })
 
 

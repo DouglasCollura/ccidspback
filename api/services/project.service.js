@@ -50,9 +50,7 @@ class ProjectService {
         'AreaPrioritaria',
         'AcademicYear',
         'LineaInvestigacion',
-        'SujetoSocial',
         'seccion'
-
       ],
       where: {
         id: {

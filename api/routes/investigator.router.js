@@ -41,6 +41,16 @@ router.post('/search', async (req, response, next) => {
   }
 })
 
+router.post('/listProject', async (req, response, next) => {
+  try {
+    const body = req.body;
+    const users = await investigatorService.listStudentProject(body)
+    response.json(users)
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.post('/',
   validatorHandler(createInvestigatorSchema, 'body'),
   validateCedula,

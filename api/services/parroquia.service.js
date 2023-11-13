@@ -15,6 +15,16 @@ class ParroquiaService {
     return {total:count, data:rows}
   }
 
+  async getByState(id){
+    const {count, rows} = await models.Parroquia.findAndCountAll({
+      where:{municipio_id:id},
+      order:[
+        ['name', 'ASC']
+      ]
+    })
+    return {total:count, data:rows}
+  }
+
   async create(data){
     const find = await sequelize.query(`
     select *,

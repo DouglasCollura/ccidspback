@@ -1,4 +1,5 @@
-const { Model, DataTypes, Sequelize } = require('sequelize')
+const { Model, DataTypes, Sequelize } = require('sequelize');
+const { PARROQUIA_TABLE } = require('./parroquia.model');
 
 const DIMENSION_ESPACIAL_TABLE = 'dimension_espacial';
 
@@ -13,6 +14,17 @@ const DimensionEspacialSchema ={
     allowNull: false,
     type: DataTypes.STRING
   },
+  parroquiaId: {
+    field: 'parroquiaId',
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: PARROQUIA_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE'
+  },
   createdAt:{
     allowNull: false,
     type: DataTypes.DATE,
@@ -23,10 +35,7 @@ const DimensionEspacialSchema ={
 
 class DimensionEspacial extends Model {
   static associate(models){
-    // this.hasMany(models.SujetoSocial,{
-    //   as:'sujetoSocial',
-    //   foreignKey:'sujetoSocialId'
-    // })
+    this.belongsTo(models.Parroquia, {as: 'parroquia'});
   }
 
   static config(sequelize){

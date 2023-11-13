@@ -49,12 +49,7 @@ class ProjectStudent extends Model {
     //   foreignKey:'id'
     // })
     this.belongsTo(models.Investigator, {as: 'investigator'});
-
-    this.hasOne(models.Project,{
-      as:'project',
-      foreignKey:'id'
-    })
-
+    this.belongsTo(models.Project, {as: 'project'});
   }
 
   static config(sequelize){

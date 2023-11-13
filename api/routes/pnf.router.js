@@ -1,7 +1,7 @@
 const express = require('express');
 
 const validatorHandler = require('../middlewares/validator.handler')
-const { createPnfSchema, updatePnfSchema, getPnfSchema } = require('./../schemas/pnf.schema')
+const { createPnfSchema, updatePnfSchema, getPnfSchema, validateCode } = require('./../schemas/pnf.schema')
 const PnfService = require('./../services/pnf.services')
 
 const router = express.Router();
@@ -17,7 +17,9 @@ router.get('/', async (request, response, next) => {
   }
 })
 
-router.post('/', validatorHandler(createPnfSchema, 'body') ,async (request, response, next) => {
+router.post('/', validatorHandler(createPnfSchema, 'body'),
+  validateCode,
+  async (request, response, next) => {
   try {
     const body = request.body;
     res = await pnfService.create(body)

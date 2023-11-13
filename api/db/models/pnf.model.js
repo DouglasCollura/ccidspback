@@ -17,6 +17,11 @@ const PnfSchema ={
     allowNull: false,
     type: DataTypes.STRING
   },
+  trayectos: {
+    field: 'trayectos',
+    allowNull: true,
+    type: DataTypes.STRING
+  },
 
   createdAt:{
     allowNull: false,

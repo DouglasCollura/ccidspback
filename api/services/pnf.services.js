@@ -3,14 +3,33 @@ const {models} = require('../libs/sequelize');
 
 class PnfService {
 
-  async get(){
-    const {count, rows} = await models.Pnf.findAndCountAll({
-      order:[
-        ['created_at', 'DESC']
-      ]
+  async get() {
+  const { count, rows } = await models.Pnf.findAndCountAll({
+    order: [['created_at', 'DESC']],
+  });
+
+  const pnfs = await Promise.all(
+    rows.map(async (row) => {
+      console.log('row: ',row?.trayectos)
+      const trayectosIds = row?.trayectos?.split(',') ?? [];
+
+      const trayectos = await models.Trayecto.findAll({
+        where: {
+          id: trayectosIds,
+        },
+      });
+
+      return {
+        ...row.toJSON(),
+        trayectos: trayectos.map((trayecto) => trayecto.toJSON()),
+      };
     })
-    return {total:count, data:rows}
-  }
+  );
+
+  return { total: count, data: pnfs };
+}
+
+
 
   async getIdByCode(data){
     const {dataValues} = await models.Pnf.findOne({

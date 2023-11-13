@@ -26,6 +26,10 @@ const ProjectSchema ={
     allowNull: false,
     type: DataTypes.INTEGER
   },
+  sujetoSocial:{
+    allowNull: false,
+    type: DataTypes.STRING
+  },
   AcademicYearId: {
     field: 'academic_year_id',
     allowNull: false,
@@ -101,17 +105,17 @@ const ProjectSchema ={
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE'
   },
-  SujetoSocialId: {
-    field: 'sujeto_social_id',
-    allowNull: false,
-    type: DataTypes.INTEGER,
-    references: {
-      model: SUJETO_SOCIAL_TABLE,
-      key: 'id'
-    },
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
-  },
+  // SujetoSocialId: {
+  //   field: 'sujeto_social_id',
+  //   allowNull: false,
+  //   type: DataTypes.INTEGER,
+  //   references: {
+  //     model: SUJETO_SOCIAL_TABLE,
+  //     key: 'id'
+  //   },
+  //   onUpdate: 'CASCADE',
+  //   onDelete: 'CASCADE'
+  // },
   createdAt:{
     allowNull: false,
     type: DataTypes.DATE,
@@ -128,7 +132,7 @@ class Project extends Model {
     this.belongsTo(models.DimensionEspacial, {as: 'DimensionEspacial'});
     this.belongsTo(models.AreaPrioritaria, {as: 'AreaPrioritaria'});
     this.belongsTo(models.LineaInvestigacion, {as: 'LineaInvestigacion'});
-    this.belongsTo(models.SujetoSocial, {as: 'SujetoSocial'});
+    // this.belongsTo(models.SujetoSocial, {as: 'SujetoSocial'});
     this.belongsTo(models.AcademicYear, {as: 'AcademicYear'});
     this.hasMany(models.ProjectStudent,{
       as:'projectStudent',

@@ -7,11 +7,23 @@ class AreaPrioritariaService {
     const {count, rows} = await models.AreaPrioritaria.findAndCountAll({
       order:[
         ['created_at', 'DESC']
-      ]
+      ],
+      include:['pnf']
     })
     return {total:count, data:rows}
   }
 
+  async getByPnf(id){
+    const {count, rows} = await models.AreaPrioritaria.findAndCountAll({
+      order:[
+        ['created_at', 'DESC']
+      ],
+      where:{
+        pnf_id:id
+      }
+    })
+    return {total:count, data:rows}
+  }
 
   async create(data){
     const find = await sequelize.query(`

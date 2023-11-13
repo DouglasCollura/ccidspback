@@ -94,6 +94,10 @@ class Investigator extends Model {
     this.belongsTo(models.Seccion, { as: 'seccion' });
     this.belongsTo(models.Trayecto, { as: 'trayecto' });
     this.belongsTo(models.AcademicYear, { as: 'academicYear' });
+      this.hasMany(models.ProjectStudent,{
+      as:'projectStudents',
+      foreignKey:'investigator_id'
+    })
   }
 
   static config(sequelize) {

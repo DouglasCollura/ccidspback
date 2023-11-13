@@ -15,6 +15,19 @@ router.get('/', async (request, response, next) => {
   }
 })
 
+
+router.get('/:id',
+  validatorHandler(getParroquiaSchema, 'params'),
+  async (request, response, next) => {
+  try {
+    const {id} = request.params;
+    const users = await parroquiaService.getByState(id)
+    response.json(users)
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.post('/', validatorHandler(createParroquiaSchema, 'body') ,async (request, response, next) => {
   try {
     const body = request.body;

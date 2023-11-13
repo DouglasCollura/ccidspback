@@ -1,3 +1,5 @@
+const { Municipio } = require('../db/models/municipio.model');
+const { Parroquia } = require('../db/models/parroquia.model');
 const sequelize = require('../libs/sequelize');
 const {models} = require('../libs/sequelize');
 
@@ -7,7 +9,28 @@ class DimensionEspacialService {
     const {count, rows} = await models.DimensionEspacial.findAndCountAll({
       order:[
         ['created_at', 'DESC']
-      ]
+      ],
+      include: [{
+        model:Parroquia, as:'parroquia',
+        include:[{
+          model:Municipio, as:'municipio',
+          include:['estado']
+        }]
+      }],
+
+    })
+    return {total:count, data:rows}
+  }
+
+  async getByParroquiaId(id){
+    const {count, rows} = await models.DimensionEspacial.findAndCountAll({
+      order:[
+        ['created_at', 'DESC']
+      ],
+      where:{
+        parroquiaId:id
+      }
+
     })
     return {total:count, data:rows}
   }

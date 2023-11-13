@@ -78,22 +78,22 @@ class TeacherService {
         people_id: id
       },
       attributes: ['seccionId'],
-      group:[
+      group: [
         'seccionId'
       ]
     })
 
     const projects = await models.Project.findAll({
-      order:[
+      order: [
         ['created_at', 'DESC']
       ],
-      include:[
+      include: [
         {
-          association:'projectStudent',
-          include:[
+          association: 'projectStudent',
+          include: [
             {
-              association:'investigator',
-              include:[
+              association: 'investigator',
+              include: [
                 'people'
               ]
             }
@@ -102,17 +102,29 @@ class TeacherService {
         },
         'pnf',
         'trayecto',
-        'DimensionEspacial',
+        {
+          association: 'DimensionEspacial',
+          include: [
+            {
+              association: 'parroquia',
+              include: [
+                {
+                  association: 'municipio',
+                  include:['estado']
+                }
+              ]
+            }
+          ]
+        },
         'AreaPrioritaria',
         'AreaPrioritaria',
         'AcademicYear',
         'LineaInvestigacion',
-        'SujetoSocial',
-        'seccion'
+        'seccion',
 
       ],
       where: {
-        seccionId:{
+        seccionId: {
           [Op.in]: teacher.map(obj => obj.seccionId)
         }
       }

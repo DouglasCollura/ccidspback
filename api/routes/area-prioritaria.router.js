@@ -17,6 +17,16 @@ router.get('/', async (request, response, next) => {
   }
 })
 
+router.get('/pnf/:id', async (request, response, next) => {
+  try {
+    const {id} = request.params;
+    const users = await areaPrioritariaService.getByPnf(id)
+    response.json(users)
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.post('/', validatorHandler(createAreaPrioritariaSchema, 'body') ,async (request, response, next) => {
   try {
     const body = request.body;
