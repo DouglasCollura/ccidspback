@@ -12,6 +12,10 @@ const ProjectStudentSchema ={
     primaryKey: true,
     type: DataTypes.INTEGER
   },
+  status: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
   investigatorId: {
     field: 'investigator_id',
     allowNull: true,

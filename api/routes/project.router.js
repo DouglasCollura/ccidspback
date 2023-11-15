@@ -28,6 +28,17 @@ router.post('/', async (request, response, next) => {
   }
 })
 
+router.patch('/change-status-investigator/:id', async (request, response, next) => {
+  try {
+    const body = request.body;
+    const {id} = request.params;
+    res = await projectService.updateStatusInvestigator(id,body)
+    response.status(201).json({status:'ok',data:res})
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.patch('/change-status/:id',
   async (request, response) => {
     const body = request.body;

@@ -101,6 +101,40 @@ class InvestigatorService {
     return { total: count, data: rows }
   }
 
+  async getListForTeacher(data) {
+    // const [data] = await sequelize.query('select * from users')
+    const { count, rows } = await models.Investigator.findAndCountAll({
+      include: [
+        'people', 'pnf', 'seccion', 'trayecto',
+        {
+          model:models.ProjectStudent,
+          as:'projectStudents',
+          include: {
+            model: models.Project,
+            as: 'project',
+            where: {
+              status: {
+                [Op.in]: [0, 1]
+              }
+            }
+          }
+        }
+      ],
+      order: [
+        ['created_at', 'DESC']
+      ],
+      where: {
+        pnf_id: data?.pnfId,
+        trayecto_id: data?.trayectoId,
+        seccion_id: data?.seccionId,
+        id: {
+          [Op.notIn]: data?.projectStudent.map(({ investigatorId }) => investigatorId)
+        }
+      },
+    })
+    return { total: count, data: rows }
+  }
+
   async create(data) {
     try {
 

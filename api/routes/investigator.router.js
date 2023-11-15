@@ -79,6 +79,21 @@ router.post('/list',
   }
 })
 
+router.post('/listForTeacher',
+  // validatorHandler(createInvestigatorSchema, 'body'),
+  // validateCedula,
+  // validateExp,
+  async (request, response, next) => {
+  try {
+    const body = request.body;
+    res = await investigatorService.getListForTeacher(body)
+    response.status(201).json({status:'ok',data:res})
+  } catch (error) {
+    next(error);
+  }
+})
+
+
 router.post('/register',
 validateEmail,
 async (request, response, next) => {

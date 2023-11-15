@@ -10,7 +10,8 @@ class ProjectService {
     data.students.map(async (e) =>{
       const data = {
         investigatorId: e,
-        projectId: project.id
+        projectId: project.id,
+        status:0
       }
       await models.ProjectStudent.create(data)
     })
@@ -80,6 +81,18 @@ class ProjectService {
         await models.ProjectStudent.create(data)
       })
 
+      return inv;
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async updateStatusInvestigator(id, data) {
+    try {
+      const inv = await models.ProjectStudent.findOne({
+        where:{investigator_id:id }
+        });
+      await inv.update({status: data.status});
       return inv;
     } catch (error) {
       console.error(error)
