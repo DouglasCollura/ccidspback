@@ -27,6 +27,17 @@ router.get('/:id',
   }
 })
 
+router.post('/search',async (request, response, next) => {
+  try {
+    const body = request.body;
+    res = await municipioService.search(body)
+    response.status(201).json({status:'ok',data:res})
+  } catch (error) {
+    next(error);
+  }
+})
+
+
 router.post('/', validatorHandler(createMunicipioSchema, 'body') ,async (request, response, next) => {
   try {
     const body = request.body;

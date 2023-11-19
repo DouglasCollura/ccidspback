@@ -15,6 +15,16 @@ router.get('/', async (request, response, next) => {
   }
 })
 
+router.post('/search', async (request, response, next) => {
+  try {
+    const body = request.body;
+    res = await estadoService.search(body)
+    response.status(201).json({status:'ok',data:res})
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.post('/', validatorHandler(createEstadoSchema, 'body') ,async (request, response, next) => {
   try {
     const body = request.body;

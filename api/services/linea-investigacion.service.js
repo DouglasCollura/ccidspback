@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const sequelize = require('../libs/sequelize');
 const {models} = require('../libs/sequelize');
 
@@ -9,6 +10,32 @@ class LineaInvestigacionService {
       order:[
         ['created_at', 'DESC']
       ]
+    })
+    return {total:count, data:rows}
+  }
+
+  async find(id){
+    const {count, rows} = await models.LineaInvestigacion.findAndCountAll({
+      where:{area_prioritaria_id:id},
+      order:[
+        ['created_at', 'DESC']
+      ]
+    })
+    return {total:count, data:rows}
+  }
+
+  async search(search){
+    const {count, rows} = await models.LineaInvestigacion.findAndCountAll({
+      include:['AreaPrioritaria'],
+      order:[
+        ['created_at', 'DESC']
+      ],
+      where:{
+        name: {
+          [Op.like]: `%${search?.search}%`,
+        },
+        area_prioritaria_id: search?.area_prioritaria_id ? search?.area_prioritaria_id : { [Op.ne]: null }
+      },
     })
     return {total:count, data:rows}
   }

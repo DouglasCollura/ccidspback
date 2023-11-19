@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const sequelize = require('../libs/sequelize');
 const {models} = require('../libs/sequelize');
 
@@ -9,6 +10,33 @@ class MunicipioService {
       order:[
         ['created_at', 'DESC']
       ]
+    })
+    return {total:count, data:rows}
+  }
+
+  async getByState(id){
+    const {count, rows} = await models.Municipio.findAndCountAll({
+      where:{estado_id:id},
+      order:[
+        ['name', 'ASC']
+      ]
+    })
+    return {total:count, data:rows}
+  }
+
+  async search(search){
+    const {count, rows} = await models.Municipio.findAndCountAll({
+      include: ['estado'],
+      order:[
+        ['created_at', 'DESC']
+      ],
+      where:{
+        name: {
+          [Op.like]: `%${search?.search}%`,
+        },
+        '$estado.id$': search?.estado_id ? search?.estado_id : { [Op.ne]: null },
+
+      }
     })
     return {total:count, data:rows}
   }

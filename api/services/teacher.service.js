@@ -62,8 +62,60 @@ class TeacherService {
           include: [
             'pnf',
             'trayecto',
-            'seccion'
+            'seccion',
+
           ]
+        },
+        {
+          association: 'user',
+          attributes: ['id']
+        }
+      ]
+    })
+
+
+    return { data: res }
+  }
+
+  async search(search) {
+
+    const data = await models.Teacher.findAll({
+      attributes: ['people_id'],
+      group: [
+        'Teacher.people_id',
+      ],
+
+    })
+
+    const res = await models.People.findAll({
+      where: {
+        id: data.map(e => e.dataValues.people_id),
+        [Op.or]: [
+          {
+            cedula: {
+              [Op.like]: `%${search?.search}%`,
+            },
+          },
+          {
+            name: {
+              [Op.like]: `%${search?.search}%`,
+            },
+          },
+        ],
+      },
+      include: [
+        {
+          association: 'teacher',
+          include: [
+            'pnf',
+            'trayecto',
+            'seccion',
+
+          ]
+        },
+        {
+          association: 'user',
+          attributes: ['id']
         }
       ]
     })
@@ -110,7 +162,7 @@ class TeacherService {
               include: [
                 {
                   association: 'municipio',
-                  include:['estado']
+                  include: ['estado']
                 }
               ]
             }

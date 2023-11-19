@@ -41,6 +41,16 @@ router.post('/search', async (req, response, next) => {
   }
 })
 
+router.post('/search-inv', async (req, response, next) => {
+  try {
+    const body = req.body;
+    const users = await investigatorService.searchInvestigator(body)
+    response.json(users)
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.post('/listProject', async (req, response, next) => {
   try {
     const body = req.body;

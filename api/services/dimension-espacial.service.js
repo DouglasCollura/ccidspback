@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Municipio } = require('../db/models/municipio.model');
 const { Parroquia } = require('../db/models/parroquia.model');
 const sequelize = require('../libs/sequelize');
@@ -18,6 +19,30 @@ class DimensionEspacialService {
         }]
       }],
 
+    })
+    return {total:count, data:rows}
+  }
+
+  async search(search){
+    const {count, rows} = await models.DimensionEspacial.findAndCountAll({
+      order:[
+        ['created_at', 'DESC']
+      ],
+      include: [{
+        model:Parroquia, as:'parroquia',
+        include:[{
+          model:Municipio, as:'municipio',
+          include:['estado']
+        }]
+      }],
+      where:{
+        name: {
+          [Op.like]: `%${search?.search}%`,
+        },
+        '$parroquia.municipio.estado.id$': search?.estado_id ? search?.estado_id : { [Op.ne]: null },
+        '$parroquia.municipio.id$': search?.municipio_id ? search?.municipio_id : { [Op.ne]: null },
+        '$parroquia.id$': search?.parroquia_id ? search?.parroquia_id : { [Op.ne]: null },
+      }
     })
     return {total:count, data:rows}
   }

@@ -33,6 +33,10 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.STRING,
   },
+  recovery_code: {
+    allowNull: true,
+    type: DataTypes.STRING
+  },
   createdAt:{
     allowNull: false,
     type: DataTypes.DATE,

@@ -9,7 +9,17 @@ class InvestigatorService {
   async get() {
     // const [data] = await sequelize.query('select * from users')
     const { count, rows } = await models.Investigator.findAndCountAll({
-      include: ['people', 'pnf', 'seccion', 'trayecto'],
+      include: ['people', 'pnf', 'seccion', 'trayecto',
+      {
+        association:'people',
+        include:[
+          {
+            association:'user',
+            attributes:['id']
+          }
+        ]
+      }
+    ],
       order: [
         ['created_at', 'DESC']
       ]
@@ -29,7 +39,17 @@ class InvestigatorService {
   async searchStudent(data) {
     // const [data] = await sequelize.query('select * from users')
     const { count, rows } = await models.Investigator.findAndCountAll({
-      include: ['people', 'pnf', 'seccion', 'trayecto'],
+      include: ['people', 'pnf', 'seccion', 'trayecto',
+      {
+        association:'people',
+        include:[
+          {
+            association:'user',
+            attributes:['id']
+          }
+        ]
+      }
+    ],
       order: [
         ['created_at', 'DESC']
       ],
@@ -37,6 +57,40 @@ class InvestigatorService {
         pnf_id: data?.pnfId,
         trayecto_id: data?.trayectoId,
         seccion_id: data?.seccionId,
+        [Op.or]: [
+          {
+            '$people.cedula$': {
+              [Op.like]: `%${data?.search}%`,
+            },
+          },
+          {
+            exp: {
+              [Op.like]: `%${data?.search}%`,
+            },
+          },
+        ],
+      },
+    })
+    return { total: count, data: rows }
+  }
+
+  async searchInvestigator(data){
+    const { count, rows } = await models.Investigator.findAndCountAll({
+      include: ['people', 'pnf', 'seccion', 'trayecto',
+      {
+        association:'people',
+        include:[
+          {
+            association:'user',
+            attributes:['id']
+          }
+        ]
+      }
+    ],
+      order: [
+        ['created_at', 'DESC']
+      ],
+      where: {
         [Op.or]: [
           {
             '$people.cedula$': {

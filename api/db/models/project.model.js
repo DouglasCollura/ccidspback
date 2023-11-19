@@ -22,6 +22,11 @@ const ProjectSchema ={
     allowNull: false,
     type: DataTypes.STRING
   },
+  description: {
+    allowNull: true,
+    type: DataTypes.TEXT
+  },
+
   status: {
     allowNull: false,
     type: DataTypes.INTEGER

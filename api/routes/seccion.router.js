@@ -27,6 +27,18 @@ router.get('/:id/:trayectoId',
   }
 })
 
+
+router.post('/search', async (request, response, next) => {
+  try {
+    const body = request.body;
+
+    const secciones = await seccionService.search(body)
+    response.json(secciones)
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.post('/', validatorHandler(createSeccionSchema, 'body') ,async (request, response, next) => {
   try {
     const body = request.body;

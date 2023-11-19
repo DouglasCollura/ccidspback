@@ -57,4 +57,14 @@ router.patch('/update/:id',
   }
 )
 
+
+router.patch('/update-inv/:id',
+  async (request, response) => {
+    const body = request.body;
+    const {id} = request.params;
+    res = await projectService.updateStatusInvestigator(id, body)
+    response.status(200).json({status:'ok',data:res})
+  }
+)
+
 module.exports = router;

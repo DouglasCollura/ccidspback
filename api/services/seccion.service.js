@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const sequelize = require('../libs/sequelize');
 const {models} = require('../libs/sequelize');
 
@@ -6,6 +7,22 @@ class SeccionService {
   async get(){
     const {count, rows} = await models.Seccion.findAndCountAll({
       include: ['pnf','trayecto'],
+      order:[
+        ['created_at', 'DESC']
+      ]
+    })
+    return {total:count, data:rows}
+  }
+
+  async search(search){
+    const {count, rows} = await models.Seccion.findAndCountAll({
+      include: ['pnf','trayecto'],
+      where:{
+        name: {
+          [Op.like]: `%${search?.search}%`,
+        },
+        pnf_id: search?.pnf ? search?.pnf : { [Op.ne]: null }
+      },
       order:[
         ['created_at', 'DESC']
       ]

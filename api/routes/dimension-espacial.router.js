@@ -38,6 +38,16 @@ router.post('/', validatorHandler(createDimensionEspacialSchema, 'body') ,async 
   }
 })
 
+router.post('/search',async (request, response, next) => {
+  try {
+    const body = request.body;
+    res = await dimensionEspacialService.search(body)
+    response.status(201).json({status:'ok',data:res})
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.patch('/:id',
   validatorHandler(getDimensionEspacialSchema, 'params'),
   validatorHandler(updateDimensionEspacialSchema, 'body'),

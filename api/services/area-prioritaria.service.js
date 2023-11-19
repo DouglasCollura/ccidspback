@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const sequelize = require('../libs/sequelize');
 const {models} = require('../libs/sequelize');
 
@@ -9,6 +10,22 @@ class AreaPrioritariaService {
         ['created_at', 'DESC']
       ],
       include:['pnf']
+    })
+    return {total:count, data:rows}
+  }
+
+  async search(search){
+    const {count, rows} = await models.AreaPrioritaria.findAndCountAll({
+      order:[
+        ['created_at', 'DESC']
+      ],
+      include:['pnf'],
+      where:{
+        name: {
+          [Op.like]: `%${search?.search}%`,
+        },
+        pnf_id: search?.pnf ? search?.pnf : { [Op.ne]: null }
+      },
     })
     return {total:count, data:rows}
   }

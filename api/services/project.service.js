@@ -47,7 +47,20 @@ class ProjectService {
         },
         'pnf',
         'trayecto',
-        'DimensionEspacial',
+        {
+          association: 'DimensionEspacial',
+          include: [
+            {
+              association: 'parroquia',
+              include: [
+                {
+                  association: 'municipio',
+                  include:['estado']
+                }
+              ]
+            }
+          ]
+        },
         'AreaPrioritaria',
         'AcademicYear',
         'LineaInvestigacion',
@@ -75,11 +88,23 @@ class ProjectService {
 
       data.students.map(async (e) =>{
         const data = {
-          investigatorId: e,
-          projectId: id
+          investigatorId: e.id,
+          projectId: id,
+          status: e.status
         }
         await models.ProjectStudent.create(data)
       })
+
+      return inv;
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async updateInvestigator(id, data) {
+    try {
+      const inv = await models.Project.findByPk(id);
+      await inv.update(data.project);
 
       return inv;
     } catch (error) {

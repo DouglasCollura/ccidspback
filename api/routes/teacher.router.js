@@ -18,6 +18,18 @@ router.get('/find/:cedula', async (request, response, next) => {
   }
 })
 
+router.post('/search', async (request, response, next) => {
+  const body = request.body;
+
+  try {
+    const {page} = request.query;
+    const users = await teacherService.search(body)
+    response.json(users)
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.get('/get-projects/:id', async (request, response, next) => {
   try {
     const { id } = request.params;

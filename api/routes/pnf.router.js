@@ -29,6 +29,16 @@ router.post('/', validatorHandler(createPnfSchema, 'body'),
   }
 })
 
+router.post('/search', async (request, response, next) => {
+  try {
+    const body = request.body;
+    res = await pnfService.search(body)
+    response.status(201).json({status:'ok',data:res})
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.patch('/:id',
   validatorHandler(getPnfSchema, 'params'),
   validatorHandler(updatePnfSchema, 'body'),

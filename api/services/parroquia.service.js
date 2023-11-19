@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Estado } = require('../db/models/estado.model');
 const { Municipio } = require('../db/models/municipio.model');
 const sequelize = require('../libs/sequelize');
@@ -11,6 +12,23 @@ class ParroquiaService {
       order:[
         ['created_at', 'DESC']
       ]
+    })
+    return {total:count, data:rows}
+  }
+
+  async search(search){
+    const {count, rows} = await models.Parroquia.findAndCountAll({
+      include: [{model:Municipio, as:'municipio', include:['estado']}],
+      order:[
+        ['created_at', 'DESC']
+      ],
+      where:{
+        name: {
+          [Op.like]: `%${search?.search}%`,
+        },
+        '$municipio.estado.id$': search?.estado_id ? search?.estado_id : { [Op.ne]: null },
+        '$municipio.id$': search?.municipio_id ? search?.municipio_id : { [Op.ne]: null },
+      }
     })
     return {total:count, data:rows}
   }

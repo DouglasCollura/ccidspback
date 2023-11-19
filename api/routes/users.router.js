@@ -16,6 +16,46 @@ router.get('/', async (request, response, next) => {
   }
 })
 
+
+router.post('/sendEmail',
+  async (request, response, next) => {
+    try {
+      const body = request.body;
+      const {id} = request.params;
+      const user = await userService.sendEmail(body)
+      response.json(user)
+    } catch (error) {
+      next(error);
+    }
+  }
+)
+
+router.post('/verifyCode',
+  async (request, response, next) => {
+    try {
+      const body = request.body;
+      const {id} = request.params;
+      const user = await userService.verifyCode(body)
+      response.json(user)
+    } catch (error) {
+      next(error);
+    }
+  }
+)
+
+router.post('/changePassword',
+  async (request, response, next) => {
+    try {
+      const body = request.body;
+      const {id} = request.params;
+      const user = await userService.changePass(body)
+      response.json(user)
+    } catch (error) {
+      next(error);
+    }
+  }
+)
+
 router.get('/:id',
   validatorHandler(getUserSchema, 'params'),
   async (request, response, next) => {
@@ -28,6 +68,7 @@ router.get('/:id',
     }
   }
 )
+
 
 router.post('/',
 validateEmail,
