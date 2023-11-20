@@ -42,7 +42,6 @@ class ProjectService {
                 'people'
               ]
             }
-
           ]
         },
         'pnf',
@@ -115,7 +114,7 @@ class ProjectService {
   async updateStatusInvestigator(id, data) {
     try {
       const inv = await models.ProjectStudent.findOne({
-        where:{investigator_id:id }
+        where:{id:id }
         });
       await inv.update({status: data.status});
       return inv;
